@@ -3,13 +3,13 @@ kind: Ingress
 metadata:
   name: teste-app-ingress
   annotations:
-    external-dns.alpha.kubernetes.io/hostname: testapp.fabrizio.nostromo.tcloud-devops.cloudtotvs.com.br.
+    external-dns.alpha.kubernetes.io/hostname: testapp.emerson.nostromo.tcloud-devops.cloudtotvs.com.br.
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: "letsencrypt-prod"    
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   rules:
-    - host: testapp.fabrizio.nostromo.tcloud-devops.cloudtotvs.com.br
+    - host: testapp.emerson.nostromo.tcloud-devops.cloudtotvs.com.br
       http:
         paths:
           - path: /
@@ -21,5 +21,5 @@ spec:
                   number: 5000
   tls:
   - hosts:
-    - testapp.fabrizio.nostromo.tcloud-devops.cloudtotvs.com.br
+    - testapp.emerson.nostromo.tcloud-devops.cloudtotvs.com.br
     secretName: testapp-secret-prod                  

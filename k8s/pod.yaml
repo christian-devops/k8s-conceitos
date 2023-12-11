@@ -13,3 +13,10 @@ spec:
       value: Testando POD
     image: fmnapoli/teste-app:3.0.0
     name: teste-app
+  - env:
+    - name: TITULO2
+      value: K8S POD2
+    - name: MENSAGEM2
+      value: Testando POD2
+    image: nginx
+    name: teste-app2

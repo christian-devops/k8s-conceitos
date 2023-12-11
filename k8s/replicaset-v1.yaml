@@ -3,7 +3,7 @@ kind: ReplicaSet
 metadata:
   name: teste-app-rs
 spec:
-  replicas: 3 # Defina o número de réplicas desejado
+  replicas: 5 # Defina o número de réplicas desejado
   selector:
     matchLabels:
       run: teste-app
