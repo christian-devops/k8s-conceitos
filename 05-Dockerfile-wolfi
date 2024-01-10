@@ -1,0 +1,11 @@
+ARG BASE=cgr.dev/chainguard/static
+
+FROM cgr.dev/chainguard/go as build
+
+COPY main.go /main.go
+RUN CGO_ENABLED=0 go build -o /app /main.go
+
+FROM $BASE
+USER nonroot
+COPY --from=build /app /usr/local/bin/
+CMD ["app"]
