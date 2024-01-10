@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: teste-app-deployment
+  name: teste-app-deployment-emerson
 spec:
   replicas: 3 # Defina o número de réplicas desejado
   selector:
@@ -13,13 +13,13 @@ spec:
         run: teste-app
     spec:
       containers:
-        - image: fmnapoli/teste-app:1.0.0
+        - image: fmnapoli/teste-app:2.0.0
           name: teste-app
           env:
             - name: TITULO
-              value: "K8S Deployment"
+              value: "K8S Deployment Emerson"
             - name: MENSAGEM
-              value: "Testando Deployment 1"
+              value: "Testando Deployment 1 Emerson"
           resources: {}
       dnsPolicy: ClusterFirst
       restartPolicy: Always
