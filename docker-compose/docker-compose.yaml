@@ -1,9 +1,9 @@
 version: '3'
 services:
   web:
-    image: fmnapoli/teste-app:3.0.0
+    image: fmnapoli/teste-app:3.0.0-wolfi
     ports:
       - "5000:5000"
     environment:
-      - TITULO=K8S Conceitos 20-12-2023
+      - TITULO=K8S Conceitos 05-01-2024
       - MENSAGEM=Atenção ao nome do Host!

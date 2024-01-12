@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: teste-app-deployment
 spec:
-  replicas: 3 # Defina o número de réplicas desejado
+  replicas: 20 # Defina o número de réplicas desejado
   selector:
     matchLabels:
       run: teste-app

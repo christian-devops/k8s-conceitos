@@ -1,15 +1,11 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  labels:
-    app: teste-app
   name: teste-app
+  labels:
+    run: teste-app
 spec:
   containers:
-  - env:
-    - name: TITULO
-      value: K8S POD
-    - name: MENSAGEM
-      value: Testando POD
-    image: fmnapoli/teste-app:3.0.0
-    name: teste-app
+    - image: fmnapoli/teste-app:3.0.0
+      name: teste-app
+      resources: {}
