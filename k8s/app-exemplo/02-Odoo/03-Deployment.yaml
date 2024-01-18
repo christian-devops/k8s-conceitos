@@ -14,6 +14,11 @@ spec:
       labels:
         app: odoo
     spec:
+      securityContext:
+        fsGroupChangePolicy: Always
+        sysctls: []
+        supplementalGroups: []
+        fsGroup: 0
       containers:
         - name: odoo
           image: odoo:17
@@ -28,4 +33,11 @@ spec:
                 secretKeyRef:
                   name: postgres-secret
                   key: password
+          volumeMounts:
+            - name: odoo-web-data
+              mountPath: /var/lib/odoo
           resources: {}
+      volumes:
+        - name: odoo-web-data
+          persistentVolumeClaim:
+            claimName: odoo-web-data-pvc
