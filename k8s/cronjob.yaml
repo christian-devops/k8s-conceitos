@@ -16,7 +16,7 @@ spec:
                 - /bin/sh
                 - -c
                 - |
-                  echo "Executando job em: $(date)"
+                  echo "Executando cronjob em: $(date)"
                   echo "================================================================================"
                   echo " /\\_/\\"
                   echo "( o.o )"
