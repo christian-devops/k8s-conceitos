@@ -1,0 +1,22 @@
+apiVersion: stackgres.io/v1
+kind: SGInstanceProfile
+metadata:
+  name: 2vcpu2memo
+spec:
+  cpu: "2"
+  memory: 2Gi
+
+---
+apiVersion: stackgres.io/v1
+kind: SGCluster
+metadata:
+  name: odoo-postgres
+spec:
+  instances: 2
+  postgres:
+    version: "15"
+  pods:
+    persistentVolume:
+      size: "10Gi"
+      storageClass: local-path
+  sgInstanceProfile: "2vcpu2memo"

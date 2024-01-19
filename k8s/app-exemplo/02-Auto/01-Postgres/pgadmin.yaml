@@ -1,0 +1,106 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pgadmin-configmap
+data:
+  servers.json: |
+    {
+        "Servers": {
+          "1": {
+            "Name": "Odoo DB Primary",
+            "Group": "Servers",
+            "Port": 5432,
+            "Username": "postgres",
+            "Host": "odoo-postgres-primary",
+            "SSLMode": "prefer",
+            "MaintenanceDB": "postgres"
+          },
+          "2": {
+            "Name": "Odoo DB Replicas",
+            "Group": "Servers",
+            "Port": 5432,
+            "Username": "postgres",
+            "Host": "odoo-postgres-replicas",
+            "SSLMode": "prefer",
+            "MaintenanceDB": "postgres"
+          }         
+        }
+    }
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pgadmin-secret
+type: Opaque
+data:
+  PGADMIN_DEFAULT_EMAIL: b2Rvb0B0b3R2cy5jb20uYnI=
+  PGADMIN_DEFAULT_PASSWORD: Y2hhbmdlLW1l
+  PGADMIN_CONFIG_ALLOW_SAVE_PASSWORD: VHJ1ZQ==
+  PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION: RmFsc2U=
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: pgadmin
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 2
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: pgadmin
+  template:
+    metadata:
+      labels:
+        app: pgadmin
+    spec:
+      containers:
+        - name: pgadmin
+          image: dpage/pgadmin4
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: 20m
+              memory: 190Mi
+            limits:
+              cpu: 500m
+              memory: 500Mi
+          ports:
+            - name: http
+              containerPort: 80
+          envFrom:
+            - secretRef:
+                name: pgadmin-secret
+          livenessProbe:
+            httpGet:
+              port: 80
+            initialDelaySeconds: 120
+            timeoutSeconds: 30
+            periodSeconds: 30
+          volumeMounts:
+            - name: servers-json-volume
+              mountPath: /pgadmin4/servers.json
+              subPath: servers.json
+      volumes:
+        - name: servers-json-volume
+          configMap:
+            name: pgadmin-configmap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pgadmin
+spec:
+  selector:
+    app: pgadmin
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP

@@ -1,0 +1,68 @@
+odooEmail: admin
+odooDatabaseFilter: .*
+smtpHost: "smtp.gmail.com"
+smtpPort: "587"
+smtpUser: "tclouddevops@gmail.com"
+smtpPassword: "treinamento@123"
+smtpProtocol: "TLS"
+
+containerPorts:
+  http: 8069
+
+resources:
+  limits:
+    memory: 1024Mi
+    cpu: 1000m
+  requests:
+    memory: 512Mi
+    cpu: 500m
+
+# extraVolumes:
+#   - name: pgcat-config-volume
+#     configMap:
+#       name: pgcat-configmap
+
+# sidecars:
+#   - name: pgcat
+#     image: fmnapoli/pgcat
+#     ports:
+#       - containerPort: 5432
+#     volumeMounts:
+#       - name: pgcat-config-volume
+#         mountPath: /etc/pgcat
+
+service:
+  type: ClusterIP
+  ports:
+    http: 80
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  hostname: treinamento.tcloud-devops.cloudtotvs.com.br
+  path: /
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: treinamento.tcloud-devops.cloudtotvs.com.br.
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  tls: true
+
+persistence:
+  enabled: true
+  storageClass: local-path
+  size: 10Gi
+
+postgresql:
+  enabled: false
+
+externalDatabase:
+  host: pgcat
+  #host: odoo-postgres
+  port: 5432
+  user: odoo
+  database: "treinamento"
+  create: true
+  postgresqlPostgresUser: "postgres"
+  existingSecret: odoo-postgres
+  existingSecretPasswordKey: superuser-password
+  existingSecretPostgresPasswordKey: superuser-password

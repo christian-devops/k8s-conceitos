@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pgcat-configmap
+data:
+  pgcat.toml: |
+    [general]
+    host = "0.0.0.0"
+    port = 5432
+    admin_username = "postgres"
+    admin_password = "de8b-693e-4107-a5c"
+
+
+    [pools.postgres.users.0]
+    username = "postgres"
+    password = "de8b-693e-4107-a5c"
+    pool_size = 10
+    min_pool_size = 1
+    pool_mode = "transaction"
+
+    [pools.postgres.shards.0]
+
+    servers = [
+      ["odoo-postgres-primary", 5432, "primary"],
+      ["odoo-postgres-replicas", 5432, "replica"]
+     ]
+
+    database = "postgres"
+
+    [pools.treinamento]
+    pool_mode = "transaction"
+    default_role = "any"
+    query_parser_enabled = true
+    primary_reads_enabled = false
+
+
+    [pools.treinamento.users.0]
+    username = "odoo"
+    password = "de8b-693e-4107-a5c"
+    pool_size = 10
+    min_pool_size = 1
+    pool_mode = "transaction"
+
+    [pools.treinamento.shards.0]
+
+    servers = [
+      ["odoo-postgres-primary", 5432, "primary"],
+      ["odoo-postgres-replicas", 5432, "replica"]
+     ]
+
+    database = "treinamento"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pgcat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pgcat
+  template:
+    metadata:
+      labels:
+        app: pgcat
+    spec:
+      containers:
+        - name: pgcat
+          image: fmnapoli/pgcat
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: pgcat-config-volume
+              mountPath: /etc/pgcat
+          resources: {}
+      volumes:
+        - name: pgcat-config-volume
+          configMap:
+            name: pgcat-configmap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pgcat
+spec:
+  selector:
+    app: pgcat
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+  type: ClusterIP
