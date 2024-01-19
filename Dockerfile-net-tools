@@ -22,4 +22,7 @@ RUN apk update && \
     elinks \
     mtr \
     htop \
+    postgresql-client \
     && rm -rf /var/cache/apk/*
+
+    CMD ["tail", "-f", "/dev/null"]
