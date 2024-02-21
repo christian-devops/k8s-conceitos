@@ -1,11 +1,3 @@
-odooEmail: admin
-odooDatabaseFilter: .*
-smtpHost: "smtp.gmail.com"
-smtpPort: "587"
-smtpUser: "tclouddevops@gmail.com"
-smtpPassword: "treinamento@123"
-smtpProtocol: "TLS"
-
 containerPorts:
   http: 8069
 

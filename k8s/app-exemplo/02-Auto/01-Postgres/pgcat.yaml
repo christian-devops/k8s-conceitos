@@ -8,46 +8,54 @@ data:
     host = "0.0.0.0"
     port = 5432
     admin_username = "postgres"
-    admin_password = "de8b-693e-4107-a5c"
+    admin_password = "bb9a-b520-404a-a9a"
+
+
+    [pools.postgres]
+    pool_mode = "transaction"
 
 
     [pools.postgres.users.0]
     username = "postgres"
-    password = "de8b-693e-4107-a5c"
+    password = "bb9a-b520-404a-a9a"
     pool_size = 10
     min_pool_size = 1
-    pool_mode = "transaction"
+    query_parser_enabled = true
+    primary_reads_enabled = false    
+    log_client_connections = true
+    log_client_disconnections = true      
+
+    [pools.postgres.users.1]
+    username = "odoo"
+    password = "bb9a-b520-404a-a9a"
+    pool_size = 10
+    min_pool_size = 1
 
     [pools.postgres.shards.0]
-
     servers = [
       ["odoo-postgres-primary", 5432, "primary"],
       ["odoo-postgres-replicas", 5432, "replica"]
      ]
-
     database = "postgres"
 
     [pools.treinamento]
-    pool_mode = "transaction"
-    default_role = "any"
-    query_parser_enabled = true
-    primary_reads_enabled = false
-
+    pool_mode = "transaction"  
 
     [pools.treinamento.users.0]
     username = "odoo"
-    password = "de8b-693e-4107-a5c"
+    password = "bb9a-b520-404a-a9a"
     pool_size = 10
     min_pool_size = 1
-    pool_mode = "transaction"
+    query_parser_enabled = true
+    primary_reads_enabled = false    
+    log_client_connections = true
+    log_client_disconnections = true      
 
     [pools.treinamento.shards.0]
-
     servers = [
       ["odoo-postgres-primary", 5432, "primary"],
       ["odoo-postgres-replicas", 5432, "replica"]
      ]
-
     database = "treinamento"
 
 ---
@@ -67,9 +75,12 @@ spec:
     spec:
       containers:
         - name: pgcat
-          image: fmnapoli/pgcat
+          image: ghcr.io/postgresml/pgcat:latest
           ports:
             - containerPort: 5432
+          env:
+            - name: RUST_LOG
+              value: debug
           volumeMounts:
             - name: pgcat-config-volume
               mountPath: /etc/pgcat
