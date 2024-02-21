@@ -3,9 +3,9 @@
 Criando um container "na unha"
 
 ```bash
-docker pull alpine
 mkdir /tmp/alpine_root
-docker export $(docker create alpine) | tar -C /tmp/alpine_root -xvf -
+wget https://dl-cdn.alpinelinux.org/alpine/v3.19/releases/x86_64/alpine-minirootfs-3.19.1-x86_64.tar.gz ~/Downloads
+tar -xzf ~/Downloads/alpine-minirootfs-3.19.1-x86_64.tar.gz -C /tmp/alpine_root
 sudo unshare --pid --fork --mount-proc=/tmp/alpine_root/proc chroot /tmp/alpine_root /bin/sh
 ```
 
