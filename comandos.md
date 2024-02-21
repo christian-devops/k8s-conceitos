@@ -33,9 +33,19 @@ Listando todos os containers
 docker container ls -a
 ```
 
-Executando um container e removendo ao final
+Executando um container com variável de ambiente,volume mapeado e removendo ao final
 ```bash
-docker run --rm -p 6378:80 nginx
+docker run -d --rm -e TESTEVAR=TESTE -p 6380:80 -v ./:/usr/share/nginx/html nginx
+```
+
+Executando um container com variável de ambiente,volume gerrenciado e removendo ao final
+```bash
+docker run -d --rm --name webapp -e TESTEVAR=TESTE -p 6380:80 -v nginx_vol:/usr/share/nginx/html nginx
+```
+Entrando no container criado para verificar a variavel de ambiente:
+```bash
+docker exec -it webapp bash
+env | grep -i teste
 ```
 
 Construindo uma Imagem
