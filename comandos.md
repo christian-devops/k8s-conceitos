@@ -1,5 +1,14 @@
 # Containers
 
+Criando um container "na unha"
+
+```bash
+docker pull alpine
+mkdir /tmp/alpine_root
+docker export $(docker create alpine) | tar -C /tmp/alpine_root -xvf -
+sudo unshare --pid --fork --mount-proc=/tmp/alpine_root/proc chroot /tmp/alpine_root /bin/sh
+```
+
 Executando um container
 ```bash
 docker run -p 6378:80 nginx
