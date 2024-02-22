@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 services:
   web:
     image: fmnapoli/teste-app:3.0.0-wolfi
@@ -7,3 +7,15 @@ services:
     environment:
       - TITULO=K8S Conceitos 05-01-2024
       - MENSAGEM=Atenção ao nome do Host!
+    deploy:
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: '0.5'  # Limite de 0.5 CPUs
+          memory: 512M  # Limite de 512 MB de memória
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000"]  # Verifica se a rota / está acessível
+      interval: 30s  # Intervalo entre cada verificação de saúde
+      timeout: 10s   # Tempo limite para cada verificação de saúde
+      retries: 3     # Número de tentativas antes de considerar o contêiner como indisponível
