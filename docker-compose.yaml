@@ -5,7 +5,7 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - TITULO=K8S Conceitos 05-01-2024
+      - TITULO=K8S Conceitos 22/02/2024
       - MENSAGEM=Atenção ao nome do Host!
     deploy:
       restart_policy:
