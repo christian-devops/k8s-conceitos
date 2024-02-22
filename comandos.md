@@ -57,9 +57,14 @@ Listando as imagens locais
 ```bash
 docker images
 ```
+
 Criando um container baseado na imagem criada
 ```bash
-docker run --rm -p 6377:5000 teste-app
+docker run --rm -p 5000:5000 teste-app
+```
+Criando um container baseado na imagem criada configurando via variáveis de ambiente.
+```bash
+docker run --rm -p 5000:5000 -e "TITULO=K8S Conceitos" -e "MENSAGEM=Atenção ao nome do Host" teste-app
 ```
 Colocando uma Tag na imagem
 ```bash
